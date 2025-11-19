@@ -257,6 +257,15 @@ func (b *QueryStructMeta) ReturnObject() string {
 	return fmt.Sprint("*", b.QueryStructName, "Do")
 }
 
+// ModelName return ModelStructName
+func (b *QueryStructMeta) ModelName() string {
+	return b.ModelStructName
+}
+
+// QueryName return QueryStructName
+func (b *QueryStructMeta) QueryName() string {
+	return b.QueryStructName
+}
 func isStructType(data reflect.Value) bool {
 	return data.Kind() == reflect.Struct ||
 		(data.Kind() == reflect.Ptr && data.Elem().Kind() == reflect.Struct)
