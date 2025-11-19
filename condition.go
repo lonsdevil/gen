@@ -3,7 +3,6 @@ package gen
 import (
 	"fmt"
 
-	"gorm.io/datatypes"
 	"gorm.io/gen/field"
 	"gorm.io/gorm/clause"
 )
@@ -26,12 +25,7 @@ func (c *condContainer) CondError() error    { return c.err }
 func exprToCondition(exprs ...clause.Expression) []Condition {
 	conds := make([]Condition, 0, len(exprs))
 	for _, e := range exprs {
-		switch e := e.(type) {
-		case *datatypes.JSONQueryExpression, *datatypes.JSONOverlapsExpression, *datatypes.JSONArrayExpression:
-			conds = append(conds, &condContainer{value: e})
-		default:
-			conds = append(conds, &condContainer{err: fmt.Errorf("unsupported Expression %T to converted to Condition", e)})
-		}
+		conds = append(conds, &condContainer{value: e})
 	}
 	return conds
 }
