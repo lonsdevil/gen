@@ -267,20 +267,20 @@ var (
 		}
 	}
 	// FieldRelate relate to table in database
-	FieldRelate = func(relationship field.RelationshipType, fieldName string, table *generate.QueryStructMeta, config *field.RelateConfig) model.CreateFieldOpt {
+	FieldRelate = func(relationship field.RelationshipType, fieldName string, table interface{}, config *field.RelateConfig) model.CreateFieldOpt {
 		if config == nil {
 			config = &field.RelateConfig{}
 		}
-
+		tableStruct := table.(*generate.QueryStructMeta)
 		return func(*model.Field) *model.Field {
 			return &model.Field{
 				Name:    fieldName,
-				Type:    config.RelateFieldPrefix(relationship) + table.StructInfo.Type,
+				Type:    config.RelateFieldPrefix(relationship) + tableStruct.StructInfo.Type,
 				Tag:     config.GetTag(fieldName),
 				GORMTag: config.GORMTag,
 				Relation: field.NewRelationWithType(
-					relationship, fieldName, table.StructInfo.Package+"."+table.StructInfo.Type,
-					table.Relations()...),
+					relationship, fieldName, tableStruct.StructInfo.Package+"."+tableStruct.StructInfo.Type,
+					tableStruct.Relations()...),
 			}
 		}
 	}
